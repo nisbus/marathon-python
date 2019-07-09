@@ -801,5 +801,5 @@ class MarathonClient(object):
                             yield ef.process(event_data)
                 except ValueError:
                     raise MarathonError('Invalid event data received.')
-        except MarathonError e:
+        except MarathonError as e:
             raise e
