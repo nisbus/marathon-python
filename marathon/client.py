@@ -786,18 +786,20 @@ class MarathonClient(object):
                 for et in event_types or []
             ]
         }
+        try:
+            for raw_message in self._do_sse_request('/v2/events', params=params):
+                try:
+                    _data = raw_message.decode('utf8').split(':', 1)
 
-        for raw_message in self._do_sse_request('/v2/events', params=params):
-            try:
-                _data = raw_message.decode('utf8').split(':', 1)
-
-                if _data[0] == 'data':
-                    if raw:
-                        yield _data[1]
-                    else:
-                        event_data = json.loads(_data[1].strip())
-                        if 'eventType' not in event_data:
-                            raise MarathonError('Invalid event data received.')
-                        yield ef.process(event_data)
-            except ValueError:
-                raise MarathonError('Invalid event data received.')
+                    if _data[0] == 'data':
+                        if raw:
+                            yield _data[1]
+                        else:
+                            event_data = json.loads(_data[1].strip())
+                            if 'eventType' not in event_data:
+                                raise MarathonError('Invalid event data received.')
+                            yield ef.process(event_data)
+                except ValueError:
+                    raise MarathonError('Invalid event data received.')
+        except MarathonError e:
+            raise e
