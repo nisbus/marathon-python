@@ -42,7 +42,7 @@ class MarathonObject(object):
         """
         if attributes:
             return cls(**{to_snake_case(k): v for k, v in attributes.items()})
-        else return {}
+        return {}
 
     def to_json(self, minimal=True):
         """Encode an object as a JSON string.
