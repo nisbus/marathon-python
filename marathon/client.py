@@ -138,8 +138,11 @@ class MarathonClient(object):
                     allow_redirects=False
                 )
             except Exception as e:
-                marathon.log.error(
-                    'Error while calling %s: %s', url, e.message)
+                if e.message:
+                    marathon.log.error(
+                        'Error while calling %s: %s', url, e.message)
+                else:
+                    marathon.log.error('Error while calling %s: %s', url, e)
             else:
                 if response.is_redirect and response.next:
                     urls.append(response.next.url)

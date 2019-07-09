@@ -40,7 +40,9 @@ class MarathonObject(object):
 
         :param dict attributes: object attributes from parsed response
         """
-        return cls(**{to_snake_case(k): v for k, v in attributes.items()})
+        if attributes:
+            return cls(**{to_snake_case(k): v for k, v in attributes.items()})
+        else return {}
 
     def to_json(self, minimal=True):
         """Encode an object as a JSON string.
